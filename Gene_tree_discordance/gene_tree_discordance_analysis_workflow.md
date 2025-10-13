@@ -1,6 +1,8 @@
 ## Generate windows and extract window alignments 
-Bed file of windows of the maco chromosomes was made by:
+Using the brown bear as reference and 50 kb windows as the example window size for the workflow
+In halStats, "brown" could be replaced with "sloth", and in bedtools makewindows, -w 50000 could be replaced with -w 10000 for 10kb windows.
 
+Generation of bed file windows for the maco chromosomes
 ```bash
 halStats --chromSizes brown (or sloth) bears.hal > brown_bears.genome 
 awk '$2 >= 20000000 || $1 == "NC_003427.1"' brown_bears.genome > brown_bears_filtered.genome # filters out chromosmes with <20M bp and keeps the mitochondria chromosome
@@ -9,7 +11,64 @@ bedtools makewindows -g brown_bears_filtered.genome -w 50000 (or 10000 or 10kb w
 Then for each window, using a custom python script, we identify overlapping reference regions from a bed file consisting of all regions that are covered by 6 or 7 species and calculate the total overlap length. 
 If the overlap exceeds 90% of the window size, the window is retained. The final filtered set of high-coverage windows is saved as a new BED file for further analysis. 
 This ensures that only windows with sufficient species representation are used in downstream analyses.
-Script linked here
+```python
+import pandas as pd
+
+# Define input file paths
+reference_bed = "../brown_bear_referenced_d6_d7.bed"
+windows_bed = "../brown_bears_50kb_windows.bed"
+
+# Load BED files into DataFrames using efficient chunk processing
+reference_df = pd.read_csv(reference_bed, sep="\t", header=None, names=["chrom", "start", "end"], dtype={"chrom": str, "start": int, "end": int})
+windows_df = pd.read_csv(windows_bed, sep="\t", header=None, names=["chrom", "start", "end"], dtype={"chrom": str, "start": int, "end": int})
+
+# Define coverage threshold (modifiable)
+coverage_threshold = 0.9  # Keep regions with more than 90% coverage
+
+# Use dictionary to store overlap sums efficiently
+from collections import defaultdict
+
+overlap_sums = defaultdict(int)
+
+# Group reference BED by chromosome
+reference_groups = reference_df.groupby("chrom")
+
+# Process each 50kb window efficiently
+for _, window in windows_df.iterrows():
+    win_chrom, win_start, win_end = window["chrom"], window["start"], window["end"]
+    win_length = win_end - win_start  # Fixed window size (50kb)
+    
+    # Get overlapping reference regions for the current chromosome
+    if win_chrom in reference_groups.groups:
+        overlapping_regions = reference_groups.get_group(win_chrom)
+        overlapping_regions = overlapping_regions[(overlapping_regions["end"] > win_start) & (overlapping_regions["start"] < win_end)]
+    else:
+        continue
+    
+    # Compute total overlap length efficiently
+    total_overlap = sum(
+        max(0, min(win_end, ref_end) - max(win_start, ref_start))
+        for ref_start, ref_end in zip(overlapping_regions["start"], overlapping_regions["end"])
+    )
+    
+    # Store the result only if overlap exceeds threshold
+    if total_overlap / win_length > coverage_threshold:
+        overlap_sums[(win_chrom, win_start, win_end)] = total_overlap
+
+
+# Convert results to a DataFrame
+result_df = pd.DataFrame.from_records(
+    [(chrom, start, end) for chrom, start, end in overlap_sums],
+    columns=["chrom", "start", "end"]
+)
+
+
+# Save results to a file
+output_file = "..brown_bears_50kb_windows_filtered.bed"
+result_df.to_csv(output_file, sep="\t", index=False, header=False)
+
+print(f"Saved results to {output_file}")
+```
 
 Filtered windows were then used to get alignments across the different species
 
@@ -22,7 +81,7 @@ module load seqkit
 # Define paths
 HAL_FILE="/path/to/file/bears.hal"
 GENOME_FILE="/path/to/file/brown_bears_filtered.genome"
-BED_FILE="/path/to/file/brown_bears_50kb_windows.bed"
+BED_FILE="/path/to/file/brown_bears_50kb_windows_filtered.bed"
 ALIGNMENT_DIR="/path/to/output/directory/1_alignments_50kb_brown"
 
 # Read the specific line from BED file
