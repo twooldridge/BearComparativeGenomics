@@ -1,3 +1,6 @@
+# Gene Tree Discordance Workflow
+All scripts were run on UCSC HPC Hummingbird. Paths were generalized and SLURM resource management was removed.
+
 ## Generate windows and extract window alignments 
 Using the brown bear as reference and 50 kb windows as the example window size for the workflow
 In halStats, "brown" could be replaced with "sloth", and in bedtools makewindows, -w 50000 could be replaced with -w 10000 for 10kb windows.
