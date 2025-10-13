@@ -1,4 +1,4 @@
-## Generate Gene windows and extract window alignments 
+## Generate windows and extract window alignments 
 Bed file of windows of the maco chromosomes was made by:
 
 ```bash
