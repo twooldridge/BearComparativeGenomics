@@ -15,7 +15,7 @@ For the assemblies tagged as chromosome-level assemblies, we are sharing a table
 - *Helarctos malayanus*:
   - BioSample: `SAMN49720842`
   - Assemblies: 
-    - `mHalMal1.NCBI.p_ctg.fasta.gz`: Primary haplotype assembly. [Chromosome-level](chr-assignments/mHelMal1.NCBI.p_ctg.chrs.csv).
+    - `mHalMal1.NCBI.p_ctg.fasta.gz`: Primary haplotype assembly. [Chromosome-level](../chr-assignments/mHelMal1.NCBI.p_ctg.chrs.csv).
       - PRJNA1284979 : Helarctos malayanus Genome sequencing primary haplotype (TaxID: 9634)
       - Locus Tag Prefixes: `ACSF8I` 
       - WGS Accession: `JBREYN000000000`
@@ -26,7 +26,7 @@ For the assemblies tagged as chromosome-level assemblies, we are sharing a table
 - *Tremartctos onrnatus*:
   - BioSample: `SAMN49720843`
   - Assemblies: 
-    - `mTreOrn2.NCBI.p_ctg.fasta.gz`: Primary haplotype assembly. [Chromosome-level](chr-assignments/mTreOrn2.NCBI.p_ctg.chrs.csv).
+    - `mTreOrn2.NCBI.p_ctg.fasta.gz`: Primary haplotype assembly. [Chromosome-level](../chr-assignments/mTreOrn2.NCBI.p_ctg.chrs.csv).
       - `PRJNA1284975` : Tremarctos ornatus Genome sequencing (TaxID: 9638)
       - Locus Tag Prefixes: `ACSF8H`
     - `mTreOrn2.NCBI.a_ctg.fasta.gz`: Alternate haplotype assembly. Scaffold-level.
@@ -35,7 +35,7 @@ For the assemblies tagged as chromosome-level assemblies, we are sharing a table
 - *Melursus ursinus*:
   - BioSample: `SAMN49720841`
   - Assemblies:
-    - `mMelUrs1.NCBI.p_ctg.fasta.gz`: Primary haplotype assembly. [Chromosome-level](chr-assignments/mMelUrs1.NCBI.p_ctg.chrs.csv).
+    - `mMelUrs1.NCBI.p_ctg.fasta.gz`: Primary haplotype assembly. [Chromosome-level](../chr-assignments/mMelUrs1.NCBI.p_ctg.chrs.csv).
       - `PRJNA1284966` : Melursus ursinus Genome sequencing principal haplotype (TaxID: 9636)
       - Locus Tag Prefixes: `ACSF8E`
       - WGS Accession: `JBQCBQ000000000`
